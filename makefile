@@ -1,40 +1,45 @@
+# your executable to be built
 TARGET = ecosystem
 
-SRC =	main.cpp\
+# fill here your cpp files
+SRC := main.cpp \
 
+# the path where to find your files
+# here your target will be generated
 BIN_DIR := ./bin/
+# every intermediate files go there
 OBJ_DIR := ./obj/
+# write your sources inside
 SRC_DIR := ./src/
+# your headers go here (you can have multiple path here)
 INC_DIR := ./include/
 
-SYS_LIBS := sfml-graphics sfml-window sfml-audio sfml-system GL
+# add or remove any system library you required
+SYS_LIBS := sfml-graphics sfml-window sfml-system GL
+# your own dependencies or ones you have near you must go here
 DEP_DIR :=
 DEP_LIBS :=
-DEP_MAKE :=
 
 OBJ := $(patsubst %.cpp,$(OBJ_DIR)%.o,$(SRC))
 DEPENDENCIES := $(OBJ:.o=.d)
 ARBO := $(sort $(dir $(DEPENDENCIES) $(OBJ_DIR)))
 
-INCLUDES = $(addprefix -I,$(INC_DIR))
-CXXFLAGS = -MMD -W -Werror -Wall -std=c++14 $(INCLUDES)
-LDFLAGS = -W -Wall -Werror
-LDLIBS = $(addprefix -L,$(DEP_DIR)) $(addprefix -l,$(DEP_LIBS)) $(addprefix -l,$(SYS_LIBS))
-CXX = g++
-SHELL = /bin/bash
+INCLUDES := $(addprefix -I,$(INC_DIR))
+CXXFLAGS := -MMD -W -Werror -Wall -std=c++14 $(INCLUDES)
+LDFLAGS := -W -Wall -Werror
+LDLIBS := $(addprefix -L,$(DEP_DIR)) $(addprefix -l,$(DEP_LIBS)) $(addprefix -l,$(SYS_LIBS))
+CXX := g++
 
-RM_INSTALL_FILES := 
-
-MK_INSTALL_DIR := 
-
-.PHONY: all debug clean fclean re re+ clear run install
+.PHONY: all debug clean fclean re
 
 all: CXXFLAGS += -O3 
 all: LDFLAGS += -O3
+all: $(TARGET)
 
 debug: CXXFLAGS += -g3
 debug: CPPFLAGS += -D__DEBUG__
 debug: LDFLAGS += -g3 -D__DEBUG__
+debug: $(TARGET)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
@@ -54,24 +59,18 @@ $(BIN_DIR)$(TARGET): $(OBJ) | $(BIN_DIR)
 
 $(OBJ): | $(ARBO)
 
-run: clear debug
-	$(BIN_DIR)$(TARGET)
-
 clean:
 	$(RM) $(OBJ)
 	$(RM) $(DEPENDENCIES)
 	$(RM) -r $(ARBO)
 
 fclean: clean
-	$(RM) $(TARGET)
+	$(RM) $(BIN_DIR)$(TARGET)
 
-re: fclean re_plugins debug
+re: fclean all
 
-re+: fclean all
+run: all
 	clear
 	$(BIN_DIR)$(TARGET)
 
-release: all
-
-clear:
-	clear
+release: fclean all

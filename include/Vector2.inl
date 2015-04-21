@@ -1,71 +1,40 @@
-namespace Utils
-{
-namespace Math
-{
-
 template <typename T>
-Vector2<T>::Vector2() : _x(0), _y(0) 
+Vector2<T>::Vector2() : x(0), y(0) 
 {
 }
 
 
 template <typename T>
-Vector2<T>::Vector2(T x, T y)
+Vector2<T>::Vector2(T p_x, T p_y)
 {
-    _x = x;
-    _y = y;
+    x = p_x;
+    y = p_y;
 }
 
 
 template <typename T>
 Vector2<T>::Vector2(Vector2<T> const& v)
 {
-    _x = v.getX();
-    _y = v.getY();
+    x = v.x;
+    y = v.y;
 }
 
 
 template <typename T>
 Vector2<T>& Vector2<T>::operator = (Vector2<T> const& v)
 {
-    _x = v.getX();
-    _y = v.getY();
+    x = v.x;
+    y = v.y;
     return *this;
 }
-
-
-//Getters
-template <typename T>
-T   Vector2<T>::getX() const
-{
-    return _x;
-}
-
-
-template <typename T>
-T   Vector2<T>::getY() const
-{
-    return _y;
-}
-
-
-
-//Setters
-template <typename T>
-auto    Vector2<T>::set(float x, float y) -> void
-{
-    _x = x;
-    _y = y;
-}
-
 
 
 //Mathematical functions
 template <typename T>
 auto    Vector2<T>::add(Vector2<T> const& v) -> Vector2<T>&
 {
-    _x += v._x;
-    _y += v._y;
+    x += v.x;
+    y += v.y;
     return *this;
 }
 
@@ -73,7 +42,7 @@ auto    Vector2<T>::add(Vector2<T> const& v) -> Vector2<T>&
 template <typename T>
 auto    Vector2<T>::add(Vector2<T> const& v) const -> Vector2<T>
 {
-    return Vector2<T>(_x + v._x, _y + v._y);
+    return Vector2<T>(x + v.x, y + v.y);
 }
 
 
@@ -81,8 +50,8 @@ auto    Vector2<T>::add(Vector2<T> const& v) const -> Vector2<T>
 template <typename T>
 auto    Vector2<T>::sub(Vector2<T> const& v) -> Vector2<T>&
 {
-    _x -= v._x;
-    _y -= v._y;
+    x -= v.x;
+    y -= v.y;
     return *this;
 }
 
@@ -90,7 +59,7 @@ auto    Vector2<T>::sub(Vector2<T> const& v) -> Vector2<T>&
 template <typename T>
 auto    Vector2<T>::sub(Vector2<T> const& v) const -> Vector2<T>
 {
-    return Vector2<T>(_x - v._x, _y - v._y);
+    return Vector2<T>(x - v.x, y - v.y);
 }
 
 
@@ -98,8 +67,8 @@ auto    Vector2<T>::sub(Vector2<T> const& v) const -> Vector2<T>
 template <typename T>
 auto    Vector2<T>::mult(Vector2<T> const& v) -> Vector2<T>&
 {
-    _x *= v._x;
-    _y *= v._y;
+    x *= v.x;
+    y *= v.y;
     return *this;
 }
 
@@ -107,65 +76,76 @@ auto    Vector2<T>::mult(Vector2<T> const& v) -> Vector2<T>&
 template <typename T>
 auto    Vector2<T>::mult(Vector2<T> const& v) const -> Vector2<T>
 {
-    return Vector2<T>(_x * v._x, _y * v._y);
+    return Vector2<T>(x * v.x, y * v.y);
 }
 
 
-
 template <typename T>
-auto    Vector2<T>::mult(float const& f) -> Vector2<T>&
+auto    Vector2<T>::mult(float f) -> Vector2<T>&
 {
-    _x *= f;
-    _y *= f;
+    x *= f;
+    y *= f;
     return *this;
 }
 
 
 template <typename T>
-auto    Vector2<T>::mult(float const& f) const -> Vector2<T>
+auto    Vector2<T>::mult(float f) const -> Vector2<T>
 {
-    return Vector2<T>(_x * f, _y * f);
+    return Vector2<T>(x * f, y * f);
 }
-
 
 
 template <typename T>
-auto    Vector2<T>::getNorm() const -> float
+auto    Vector2<T>::div(float f) -> Vector2<T>&
 {
-    return sqrt(_x * _x + _y * _y);
+	x /= f;
+	y /= f;
+	return *this;
 }
 
+
+template <typename T>
+auto    Vector2<T>::div(float f) const -> Vector2<T>
+{
+	return Vector2<T>(x / f, y / f);
+}
+
+
+template <typename T>
+auto    Vector2<T>::mag() const -> float
+{
+	return sqrt(x * x + y * y);
+}
 
 
 template <typename T>
 auto    Vector2<T>::normalize() -> Vector2<T>&
 {
-    float n = 1 / this->getNorm();
+	float m = mag();
 
-    if (0 != n)
-    {
-        _x *= n;
-        _y *= n;
-    }
+	if (0 != m)
+	{
+		this->div(m);
+	}
 
-    return *this;
+	return *this;
 }
 
 
 template <typename T>
-auto    Vector2<T>::getNormalized() const -> Vector2<T>
+auto    Vector2<T>::normalize() const -> Vector2<T>
 {
     Vector2<T> ret = *this;
     return ret.normalize();
 }
 
 
-
 template <typename T>
 auto    Vector2<T>::invert() -> Vector2<T>&
 {
-    _x *= -1;
-    _y *= -1;
+    x *= -1;
+    y *= -1;
     return *this;
 }
 
@@ -174,8 +154,8 @@ template <typename T>
 auto    Vector2<T>::getInverted() const -> Vector2<T>
 {
     Vector2<T> ret = *this;
-    ret._x *= -1;
-    ret._y *= -1;
+    ret.x *= -1;
+    ret.y *= -1;
     return ret;
 }
 
@@ -184,14 +164,14 @@ auto    Vector2<T>::getInverted() const -> Vector2<T>
 template <typename T>
 auto    Vector2<T>::dotProduct(Vector2<T> const& v) const -> float
 {
-    return (_x * v._x + _y * v._y);
+    return (x * v.x + y * v.y);
 }
 
 
 template <typename T>
 auto    Vector2<T>::crossProduct(Vector2<T> const& v) const -> float
 {
-    return (_x * v._y - _y * v._x);
+    return (x * v.y - y * v.x);
 }
 
 
@@ -257,14 +237,10 @@ template class Vector2<long>;
 template class Vector2<float>;
 template class Vector2<double>;
 
-} // namespace Math
-
-} /* namespace Engine */
-
 
 template <typename T>
-std::ostream&   operator << (std::ostream& os, Utils::Math::Vector2<T> const& v)
+std::ostream&   operator << (std::ostream& os, Vector2<T> const& v)
 {
-    os << "Vector2 -> x:" << v.getX() << ", y:" << v.getY() << std::endl;
+    os << "Vector2" << " : [" << v.x << ", " << v.y << "]";
     return os;
 }
