@@ -142,6 +142,21 @@ auto    Vector2<T>::normalize() const -> Vector2<T>
 
 
 template <typename T>
+auto	Vector2<T>::limit(float max)	-> void
+{
+	x = std::min((float)x, max);
+	y = std::min((float)y, max);
+}
+
+
+template <typename T>
+auto	Vector2<T>::dist(const Vector2<T>& v) -> float
+{
+	return sqrt(((v.x - x)*(v.x - x)) + ((v.y - y)*(v.y - y)));
+}
+
+
+template <typename T>
 auto    Vector2<T>::invert() -> Vector2<T>&
 {
     x *= -1;

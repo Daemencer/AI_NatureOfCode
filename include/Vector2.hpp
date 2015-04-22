@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 template <typename T>
 class Vector2
@@ -36,7 +37,10 @@ public:
 
 // EXPERIMENTAL
 
-	auto	limit()	-> void;
+	auto	limit(float)	-> void;
+
+	auto	clip(float min, float max) -> void;
+	auto	clip(const Vector2&) -> void;
 
 	auto 	heading() -> Vector2&;
 	auto	heading() const -> Vector2;
