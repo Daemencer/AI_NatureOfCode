@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector2.hpp"
+#include "Liquid.hpp"
 
 class Mover
 {
@@ -19,8 +20,15 @@ public:
 	auto	operator = (const Mover&) -> Mover&; // todo
 	~Mover();
 
+	auto	initialize(sf::RenderWindow*) -> void;
+	auto	shutdown() -> void; 
+
 	auto	update() -> void;
 	auto	draw() -> void;
+
+	auto	isInsideLiquid(const Liquid&) -> bool;
+
+	auto	drag(const Liquid&) -> void;
 
 	auto	getLocation() const -> Vector2f { return _location; }
 	auto	setLocation(float x, float y) -> void { _location.x = x; _location.y = y; }
@@ -42,25 +50,45 @@ public:
 
 	auto	setMousePos(float x, float y) -> void { _mousePos.x = x; _mousePos.y = y; }
 
-	auto	applyForce(const Vector2f&) -> void;
+	// force lasts for 1 frame (easier for now)
+	auto	addForce(const Vector2f&) -> void;
 
 private:
 	auto	_checkEdges() -> void;
+	auto	_applyForces() -> void;
+	auto	_applyForce(const Vector2f&) -> void;
+	auto	_applyGravity() -> void;
+	auto	_applyFriction() -> void;
+	auto	_applyCustomForces() -> void;
+
+
+	// experimental functions
 	auto	_goToMouse() -> void;
 
-	sf::RenderWindow*	_win 		= nullptr;
-
-	Vector2f 	_location;
-	Vector2f 	_velocity;
-	Vector2f	_acceleration;
-
-	float		_mass;
-
-	float		_topSpeed = 10.f;
-
+	// experimental members
 	Vector2f	_mousePos = {0.f, 0.f};
 
-	sf::Shape*			_graphic 	= nullptr;
+
+	// static members
+	static Vector2f	gravity;
+
+
+	// contextual data
+	sf::RenderWindow*	_win 		= nullptr;
+	sf::CircleShape*	_graphic 	= new sf::CircleShape(20);
+
+
+	// relevant data
+	Vector2f 	_location 		= {0.f, 0.f};
+	Vector2f 	_velocity 		= {0.f, 0.f};
+	Vector2f	_acceleration 	= {0.f, 0.f};
+	std::vector<Vector2f>		_customForces;
+
+
+	// members (might move to a struct)
+	float	_mass 		= 5.f;
+	float	_friction	= 0.01;
+	float	_topSpeed	= 10.f;
 };
 
 #endif /* __MOVER_HPP_INCLUDED__ */
