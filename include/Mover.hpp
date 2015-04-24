@@ -9,13 +9,16 @@
 class Mover
 {
 public:
-	Mover(sf::RenderWindow*);
-	Mover(sf::RenderWindow*, float xPos, float yPos);
-	Mover(sf::RenderWindow*, float xPos, float yPos, float xVelocity, float yVelocity);
-	Mover(sf::RenderWindow*, float xPos, float yPos, float xVelocity, float yVelocity, float xAcc, float yAcc);
-	Mover(sf::RenderWindow*, const Vector2f& p);
-	Mover(sf::RenderWindow*, const Vector2f& p, const Vector2f& v);
-	Mover(sf::RenderWindow*, const Vector2f& p, const Vector2f& v, const Vector2f& a);
+	Mover(sf::RenderWindow*
+		, float xPos = 0.f, float yPos = 0.f
+		, float xVelocity = 0.f, float yVelocity = 0.f
+		, float xAcc = 0.f, float yAcc = 0.f
+		, float mass = 5.f);
+	Mover(sf::RenderWindow*
+		, const Vector2f& p = {0.f, 0.f}
+		, const Vector2f& v = {0.f, 0.f}
+		, const Vector2f& a = {0.f, 0.f}
+		, float mass = 5.f);
 	Mover(const Mover&) = default; // todo
 	auto	operator = (const Mover&) -> Mover&; // todo
 	~Mover();
@@ -75,7 +78,7 @@ private:
 
 	// contextual data
 	sf::RenderWindow*	_win 		= nullptr;
-	sf::CircleShape*	_graphic 	= new sf::CircleShape(20);
+	sf::CircleShape*	_graphic 	= new sf::CircleShape();
 
 
 	// relevant data

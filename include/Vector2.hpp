@@ -11,39 +11,63 @@ class Vector2
 public:
     Vector2();
     Vector2(T, T);
-    Vector2(Vector2<T> const&);
-    Vector2<T>& operator = (Vector2<T> const&);
+    Vector2(const Vector2<T>&);
+    Vector2<T>& operator = (const Vector2<T>&);
     ~Vector2() = default;
 
-    auto    add(Vector2 const&) -> Vector2&;
-    auto    add(Vector2 const&) const -> Vector2;
+    auto    add(const Vector2&) -> Vector2&;
 
-    auto    sub(Vector2 const&) -> Vector2&;
-    auto    sub(Vector2 const&) const -> Vector2;
+    auto    sub(const Vector2&) -> Vector2&;
 
     auto    mult(float) -> Vector2&;
-    auto    mult(float) const -> Vector2;
-
-    auto    mult(Vector2 const&) -> Vector2&;
-    auto    mult(Vector2 const&) const -> Vector2;
+    auto    mult(const Vector2&) -> Vector2&;
 
 	auto	div(float) -> Vector2&;
-	auto	div(float) const -> Vector2;
 
 	auto	mag() const -> float;
 
 	auto	normalize() -> Vector2&;
-	auto	normalize() const -> Vector2;
 
-// EXPERIMENTAL
+	auto	limit(float) -> void;
 
-	auto	limit(float)	-> void;
+	auto	dist(const Vector2&) -> float;
+
+    auto    invert() -> Vector2&;
+
+    auto    dotProduct(Vector2 const&) const -> float;
+
+    auto    crossProduct(Vector2 const&) const -> float;
 
 	auto	clip(float min, float max) -> void;
 	auto	clip(const Vector2&) -> void;
 
-	auto 	heading() -> Vector2&;
-	auto	heading() const -> Vector2;
+	auto 	heading() const -> float;
+
+	// STATIC
+   	static	auto    add(const Vector2&, const Vector2&) -> Vector2;
+
+   	static	auto    sub(const Vector2&, const Vector2&) -> Vector2;
+
+   	static	auto    mult(const Vector2&, float) -> Vector2;
+
+   	static	auto    mult(const Vector2&, const Vector2&) -> Vector2;
+
+   	static	auto	div(const Vector2&, float) -> Vector2;
+
+   	static	auto	normalize(const Vector2&) -> Vector2;
+
+   	static	auto	dist(const Vector2&, const Vector2&) -> float;
+
+   	static	auto    inverted(const Vector2&) -> Vector2;
+
+    static	auto    dotProduct(const Vector2&, const Vector2&) -> float;
+
+    static	auto    crossProduct(const Vector2&, const Vector2&) -> float;
+
+	static 	auto	clip(const Vector2&, float, float) -> Vector2;
+	static	auto	clip(const Vector2&, const Vector2&) -> Vector2;
+
+// EXPERIMENTAL
 
 	auto	rotate(float) -> Vector2&;
 	auto	rotate(float) const -> Vector2;
@@ -51,8 +75,6 @@ public:
 	auto	lerp() -> Vector2&;
 	auto	lerp() const -> Vector2;
 
-	auto	dist(const Vector2&) -> float;
-	auto	dist(const Vector2&) const -> float;
 
 	auto	angleBetween(const Vector2&) -> Vector2&;
 	auto	angleBetween(const Vector2&) const -> Vector2;
@@ -61,22 +83,19 @@ public:
 
 // END EXPERIMENTAL
 
-    auto    invert() -> Vector2&;
-    auto    getInverted() const -> Vector2;
-
-    auto    dotProduct(Vector2 const&) const -> float;
-    auto    crossProduct(Vector2 const&) const -> float;
-
     auto    operator * () const -> Vector2;
 
-    auto    operator +  (Vector2 const&) const -> Vector2;
-    auto    operator += (Vector2 const&) -> Vector2&;
+    auto    operator +  (const Vector2&) const -> Vector2;
+    auto    operator += (const Vector2&) -> Vector2&;
 
-    auto    operator -  (Vector2 const&) const -> Vector2;
-    auto    operator -= (Vector2 const&) -> Vector2&;
+    auto    operator -  (const Vector2&) const -> Vector2;
+    auto    operator -= (const Vector2&) -> Vector2&;
 
-    auto    operator *  (Vector2 const&) const -> Vector2;
-    auto    operator *= (Vector2 const&) -> Vector2&;
+    auto    operator *  (const Vector2&) const -> Vector2;
+    auto    operator *= (const Vector2&) -> Vector2&;
+
+    auto    operator /  (const Vector2&) const -> Vector2;
+    auto    operator /= (const Vector2&) -> Vector2&;
 
     T   x;
     T   y;

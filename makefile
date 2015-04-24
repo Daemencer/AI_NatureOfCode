@@ -5,6 +5,7 @@ TARGET = ecosystem
 SRC := main.cpp \
 		Mover.cpp\
 		Liquid.cpp\
+		Attractor.cpp\
 
 # the path where to find your files
 # here your target will be generated

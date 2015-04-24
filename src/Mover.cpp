@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include <SFML/System.hpp>
 
@@ -8,54 +9,21 @@
 Vector2f Mover::gravity = {0.f, .1f};
 
 
-Mover::Mover(sf::RenderWindow* win)
-{
-	initialize(win);
-}
-
-Mover::Mover(sf::RenderWindow* win, float xPos, float yPos):
-	_location({xPos, yPos})
-{
-	initialize(win);
-}
-
-
-Mover::Mover(sf::RenderWindow* win, float xPos, float yPos, float xVelocity, float yVelocity):
-    _location({xPos, yPos}),
-    _velocity({xVelocity, yVelocity})
-{
-	initialize(win);
-}
-
-
-Mover::Mover(sf::RenderWindow* win, float xPos, float yPos, float xVelocity, float yVelocity, float xAcc, float yAcc):
+Mover::Mover(sf::RenderWindow* win, float xPos, float yPos, float xVelocity, float yVelocity, float xAcc, float yAcc, float mass):
     _location({xPos, yPos}),
     _velocity({xVelocity, yVelocity}),
-	_acceleration({xAcc, yAcc})
+	_acceleration({xAcc, yAcc}),
+	_mass(mass)
 {
 	initialize(win);
 }
 
 
-Mover::Mover(sf::RenderWindow* win, const Vector2f& p):
-    _location({p.x, p.y})
-{
-	initialize(win);
-}
-
-
-Mover::Mover(sf::RenderWindow* win, const Vector2f& p, const Vector2f& v):
-    _location({p.x, p.y}),
-    _velocity({v.x, v.y})
-{
-	initialize(win);
-}
-
-
-Mover::Mover(sf::RenderWindow* win, const Vector2f& p, const Vector2f& v, const Vector2f& a):
+Mover::Mover(sf::RenderWindow* win, const Vector2f& p, const Vector2f& v, const Vector2f& a, float mass):
     _location({p.x, p.y}),
     _velocity({v.x, v.y}),
-	_acceleration({a.x, a.y})
+	_acceleration({a.x, a.y}),
+	_mass(mass)
 {
 	initialize(win);
 }
@@ -65,10 +33,11 @@ auto	Mover::initialize(sf::RenderWindow* win) -> void
 {
 	_win = win;
 
+	_graphic->setRadius(_mass * 2);
 	_graphic->setFillColor(sf::Color(170, 170, 170, 255));
     _graphic->setOutlineColor(sf::Color(50, 50, 50, 255));
-    _graphic->setOutlineThickness(2);
-	_graphic->setOrigin(10, 10);
+    _graphic->setOutlineThickness(_mass / 4);
+	_graphic->setOrigin(_mass, _mass);
 }
 
 
@@ -146,14 +115,14 @@ auto	Mover::addForce(const Vector2f& f) -> void
 
 auto	Mover::_applyForce(const Vector2f& force) -> void
 {
-	auto vec = force.div(_mass);
+	auto vec = Vector2f::div(force, _mass);
 	_acceleration.add(vec);
 }
 
 
 auto	Mover::_applyForces() -> void
 {
-	_applyGravity();
+//	_applyGravity();
 	_applyFriction();
 	_applyCustomForces();
 }
